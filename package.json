@@ -27,4 +27,6 @@
     "@types/dotenv": "^6.1.1",
     "@types/mssql": "^9.1.7"
   }
+  
 }
+
