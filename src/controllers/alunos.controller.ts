@@ -53,18 +53,18 @@ export class AlunosController {
     let matricula = await this.getToLastMatricula();
 
     aluno.matricula = matricula;
-
+    console.log(matricula)
     try {
       let conn = await connectAlunos();
 
       await conn
         .request()
         .query(
-          `INSERT INTO aluno (matricula, nome, email, dt_nascimento, telefone) VALUES (${
+          `INSERT INTO aluno (matricula, nome, email, dt_nascimento, telefone,ativo ) VALUES (${
             aluno.matricula
           }, '${aluno.nome}', '${aluno.email}', '${new Date(
             aluno.dt_nascimento
-          ).toISOString()}', ${aluno.telefone})`
+          ).toISOString()}', ${aluno.telefone}, ${aluno.ativo})`
         );
       return aluno; // Retorne o objeto Aluno
     } catch (erro) {

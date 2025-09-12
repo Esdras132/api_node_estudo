@@ -10,6 +10,7 @@ export const dbConfig: sql.config = {
   password: process.env.DB_PASSWORD,
   port: Number(process.env.DB_PORT),
   options: {
+    encrypt: false,
     trustServerCertificate: true
   }
 };
