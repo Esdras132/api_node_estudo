@@ -41,8 +41,9 @@ export class AlunosController {
           aluno
         ORDER BY
           matricula DESC;`);
-
-      return resultado.recordset[0].matricula + 1;
+      return resultado.recordset.length === 0
+        ? 1001
+        : resultado.recordset[0].matricula + 1;
     } catch (erro) {
       console.error("Erro ao buscar alunos:", erro);
       return erro;
@@ -51,9 +52,14 @@ export class AlunosController {
 
   async createAluno(aluno: Aluno) {
     let matricula = await this.getToLastMatricula();
+    let ativo;
 
     aluno.matricula = matricula;
-    console.log(matricula)
+    console.log(matricula);
+
+    if (aluno.ativo === true) ativo = 1;
+    else ativo = 0;
+
     try {
       let conn = await connectAlunos();
 
@@ -64,12 +70,12 @@ export class AlunosController {
             aluno.matricula
           }, '${aluno.nome}', '${aluno.email}', '${new Date(
             aluno.dt_nascimento
-          ).toISOString()}', ${aluno.telefone}, ${aluno.ativo})`
+          ).toISOString()}', ${aluno.telefone}, ${ativo})`
         );
-      return aluno; // Retorne o objeto Aluno
+      return 201; // Retorne o objeto Aluno
     } catch (erro) {
       console.error("Erro ao criar aluno:", erro);
-      return erro;
+      return 500;
     }
   }
 

@@ -13,6 +13,7 @@ import { routes_alunos } from "./routes/alunos.route";
 import { AppDataSource } from "./data-source";
 import 'reflect-metadata'; 
 import { routes_funcionarios } from "./routes/funcionarios.route";
+import { routes_login } from "./routes/login.routes";
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -51,6 +52,11 @@ app.register(routes_alunos, {
 app.register(routes_funcionarios, {
   prefix: "/funcionarios",
 });
+
+app.register(routes_login,{
+  prefix: "/login",
+})
+
 
 
 
