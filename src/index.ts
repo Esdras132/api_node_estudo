@@ -13,7 +13,8 @@ import { routes_alunos } from "./routes/alunos.route";
 import { AppDataSource } from "./data-source";
 import 'reflect-metadata'; 
 import { routes_funcionarios } from "./routes/funcionarios.route";
-import { routes_login } from "./routes/login.routes";
+import { authenticate, routes_login } from "./routes/login.routes";
+
 
 const app = fastify().withTypeProvider<ZodTypeProvider>();
 
@@ -28,13 +29,23 @@ app.register(fastifyCors, {
 app.register(fastifySwagger, {
   openapi: {
     info: {
-      title: "teste API",
+      title: "Teste API",
+      description: "Documentação gerada automaticamente com Zod + Fastify",
       version: "1.0.0",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
   transform: jsonSchemaTransform,
 });
-
 
 
 app.register(fastifySwaggerUi, {
@@ -51,10 +62,16 @@ app.register(routes_alunos, {
 
 app.register(routes_funcionarios, {
   prefix: "/funcionarios",
+  
 });
 
 app.register(routes_login,{
-  prefix: "/login",
+  prefix: "/auth",
+   secret: 'uma-chave-secreta-muito-longa-e-dificil-de-adivinhar-com-pelo-menos-32-caracteres',
+  cookie: {
+    secure: false, // Em produção, mude para 'true' se usar HTTPS
+    maxAge: 86400000 // Tempo de vida do cookie em milissegundos (24 horas)
+  }
 })
 
 

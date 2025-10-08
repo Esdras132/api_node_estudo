@@ -2,10 +2,11 @@ import { AlunosController } from "../controllers/alunos.controller";
 import { Aluno } from "../entity/Aluno";
 import { FastifyTypedInstance } from "../types";
 import { z } from "zod";
+import { authenticate } from "../routes/login.routes";
 
 export async function routes_alunos(app: FastifyTypedInstance) {
   const alunosController = new AlunosController();
-
+app.addHook('preHandler', authenticate);
   app.get(
     "",
     {

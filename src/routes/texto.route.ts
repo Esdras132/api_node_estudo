@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FastifyTypedInstance } from "../types";
+import { authenticate } from "./login.routes";
 
 interface TextModel {
     texto: string;
@@ -7,6 +8,7 @@ interface TextModel {
 const texts: TextModel[] = [];
 
 export async function routes(app: FastifyTypedInstance) {
+    app.addHook('preHandler', authenticate);
     app.get("", {
         schema: {
             tags: ["Text"],

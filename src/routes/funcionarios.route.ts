@@ -2,10 +2,11 @@ import { FuncionariosController } from "../controllers/funcionarios.controller";
 import { Aluno } from "../entity/Aluno";
 import { FastifyTypedInstance } from "../types";
 import { z } from "zod";
+import { authenticate } from "./login.routes";
 
 export async function routes_funcionarios(app: FastifyTypedInstance) {
   const funcionariosController = new FuncionariosController();
-
+app.addHook('preHandler', authenticate);
   app.get(
     "",
     {
